@@ -1,10 +1,12 @@
-var browserify = require('browserify'),
-    gulp       = require('gulp'),
-    gutil      = require('gulp-util'),
-    jshint     = require('gulp-jshint'),
-    source     = require("vinyl-source-stream"),
-    watchify   = require('watchify'),
-    connect    = require('gulp-connect');
+var browserify   = require('browserify'),
+    gulp         = require('gulp'),
+    gutil        = require('gulp-util'),
+    jshint       = require('gulp-jshint'),
+    source       = require("vinyl-source-stream"),
+    watchify     = require('watchify'),
+    connect      = require('gulp-connect'),
+    sass         = require('gulp-sass'),
+    autoprefixer = require('gulp-autoprefixer');
 
 var livereloadport = 35729,
     serverport     = 5000;
@@ -68,9 +70,18 @@ gulp.task('views', function() {
     .pipe(connect.reload());
 });
 
+gulp.task('styles', function() {
+  gulp.src('app/styles/*.scss')
+    .pipe(sass({onError: gutil.log}))
+    .pipe(autoprefixer("last 2 versions", " > 1%", "ie 8"))
+    .pipe(gulp.dest('dist/styles/'))
+    .pipe(connect.reload());
+});
+
 gulp.task('watch', function() {
     gulp.watch(['app/js/*.js', 'app/js/**/*.js'], ['lint', 'watchScripts']);
     gulp.watch(['app/index.html', 'app/views/**/*.html'], ['views']);
+    gulp.watch(['app/styles/*.scss','app/styles/**/*.scss'], ['styles']);
 });
 
-gulp.task('default', ['webserver', 'watch']);
+gulp.task('default', ['webserver', 'views', 'styles', 'watchScripts', 'watch']);
