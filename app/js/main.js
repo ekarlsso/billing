@@ -1,5 +1,10 @@
 (function() {
   'use strict';
-  var element = document.getElementById();
-  element.innerHTML = '<b>Voi mahoton</b>';
+
+  var app = angular.module('myApp', []);
+  app.controller('HelloCtrl', function($scope) {
+    $scope.test = 'This is test3!!';
+  });
+
+
 })();

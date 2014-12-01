@@ -51,7 +51,8 @@ var browserifyScript = function(watch) {
     stream.on('error', gutil.log);
     return stream
       .pipe(source('main.js'))
-      .pipe(gulp.dest('./dist/js'));
+      .pipe(gulp.dest('./dist/js'))
+      .pipe(connect.reload());
   };
 
   bundler.on('update', rebundle);
@@ -61,8 +62,7 @@ var browserifyScript = function(watch) {
 
 gulp.task('views', function() {
   gulp.src('app/index.html')
-    .pipe(gulp.dest('dist/'))
-    .pipe(connect.reload());
+    .pipe(gulp.dest('dist/'));
   gulp.src('./app/views/**/*')
     .pipe(gulp.dest('dist/views/'))
     .pipe(connect.reload());
